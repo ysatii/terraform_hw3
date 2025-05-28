@@ -54,7 +54,7 @@ variable "each_vm" {
 1. Файл  count-vm.tf создан, группа безопастности присвоена
 Листинг count-vm.tf 
 <details>
-  <summary>Нажми, чтобы раскрыть</summary>
+  <summary>Нажми, чтобы раскрыть Листинг count-vm.tf</summary>
 
 ```
 
