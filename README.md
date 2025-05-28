@@ -21,11 +21,12 @@
 Теперь пишем красивый код, хардкод значения не допустимы!
 ------
 
-### Задание 1
+## Задание 1
 
 1. Изучите проект.
 2. Инициализируйте проект, выполните код. 
 
+## Решение 1
 
 Приложите скриншот входящих правил «Группы безопасности» в ЛК Yandex Cloud .
  ![рис 3](https://github.com/ysatii/terraform_hw3/blob/main/img/img_3.jpg)
@@ -33,7 +34,7 @@
  ![рис 2](https://github.com/ysatii/terraform_hw3/blob/main/img/img_2.jpg)
 ------
 
-### Задание 2
+## Задание 2
 
 1. Создайте файл count-vm.tf. Опишите в нём создание двух **одинаковых** ВМ  web-1 и web-2 (не web-0 и web-1) с минимальными параметрами, используя мета-аргумент **count loop**. Назначьте ВМ созданную в первом задании группу безопасности.(как это сделать узнайте в документации провайдера yandex/compute_instance )
 2. Создайте файл for_each-vm.tf. Опишите в нём создание двух ВМ для баз данных с именами "main" и "replica" **разных** по cpu/ram/disk_volume , используя мета-аргумент **for_each loop**. Используйте для обеих ВМ одну общую переменную типа:
@@ -48,6 +49,52 @@ variable "each_vm" {
 6. Инициализируйте проект, выполните код.
 
 ------
+## Решение 2
+
+1. Файл  count-vm.tf создан, группа безопастности присвоена
+Листинг count-vm.tf 
+```
+
+resource "yandex_compute_instance" "count" {
+  count = 2
+  name        = "web-${count.index+1}"
+  zone        = var.default_zone
+  platform_id = "standard-v1"
+  resources {
+    cores         = 2
+    memory        = 1
+    core_fraction = 5
+  }
+  boot_disk {
+    initialize_params {
+      image_id = var.vms_boot-disk_id
+    }
+  }
+
+  scheduling_policy {
+    preemptible = true
+  }
+  
+  network_interface {
+    subnet_id = yandex_vpc_subnet.develop.id
+    nat       = true
+    security_group_ids = [ 
+      yandex_vpc_security_group.example.id
+    ]
+
+  }
+
+  metadata = {
+    serial-port-enable = 1
+    ssh-keys           = "ubuntu:${var.vms_ssh_root_key}"
+  }
+
+}
+```
+ ![рис 3](https://github.com/ysatii/terraform_hw3/blob/main/img/img_3.jpg)
+ ![рис 1](https://github.com/ysatii/terraform_hw3/blob/main/img/img_1.jpg)
+ ![рис 2](https://github.com/ysatii/terraform_hw3/blob/main/img/img_2.jpg)
+
 
 ### Задание 3
 

@@ -1,6 +1,3 @@
-
-}
-
 variable "default_zone" {
   type        = string
   default     = "ru-central1-a"
@@ -17,4 +14,31 @@ variable "vpc_name" {
   type        = string
   default     = "develop"
   description = "VPC network&subnet name"
+}
+
+variable "vms_ssh_root_key" {
+  type        = string
+  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGJ/8nl4RWFm+0oXUDpUSjuOP3AHCl2E/af1CpzwhtO6 lamer@lamer-VirtualBox"
+  description = "ssh-keygen -t ed25519"
+}
+
+variable "vms_boot-disk_id" {
+  type        = string
+  default     = "fd8aus3bfglr6dg9hsbk"
+  description = "https://yandex.cloud/ru/docs/compute/operations/images-with-pre-installed-software/get-list"
+}
+
+variable "token" {
+  description = "IAM token for Yandex Cloud"
+  type        = string
+}
+
+variable "cloud_id" {
+  description = "Yandex Cloud cloud ID"
+  type        = string
+}
+
+variable "folder_id" {
+  description = "Yandex Cloud folder ID"
+  type        = string
 }
