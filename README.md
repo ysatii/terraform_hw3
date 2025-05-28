@@ -188,12 +188,71 @@ locals {
  ![рис 7](https://github.com/ysatii/terraform_hw3/blob/main/img/img_7.jpg)
  ![рис 8](https://github.com/ysatii/terraform_hw3/blob/main/img/img_8.jpg)
 
-### Задание 3
+## Задание 3
 
 1. Создайте 3 одинаковых виртуальных диска размером 1 Гб с помощью ресурса yandex_compute_disk и мета-аргумента count в файле **disk_vm.tf** .
 2. Создайте в том же файле **одиночную**(использовать count или for_each запрещено из-за задания №4) ВМ c именем "storage"  . Используйте блок **dynamic secondary_disk{..}** и мета-аргумент for_each для подключения созданных вами дополнительных дисков.
 
-------
+## Решение 3
+ Листинг disk_vm.tf
+<details>
+<summary>Нажми, чтобы раскрыть Листинг disk_vm.tf</summary>
+```
+resource "yandex_compute_disk" "my_disk" {
+  count    = 3
+  name     = "disk-name-${count.index}"
+  size     = "1"
+  type     = "network-ssd"
+  zone     = "ru-central1-a"
+ 
+
+  labels = {
+    environment = "disk-${count.index}"
+  }
+}
+
+resource "yandex_compute_instance" "storage" {
+
+name = "vm-from-disks"
+platform_id = "standard-v3"
+zone = "ru-central1-a"
+allow_stopping_for_update = "true"
+
+resources {
+cores = 2
+memory = 4
+}
+
+boot_disk {
+initialize_params {
+image_id = var.vms_boot-disk_id
+}
+}
+
+dynamic secondary_disk {
+for_each = "${yandex_compute_disk.my_disk.*.id}"
+   content {
+        disk_id = yandex_compute_disk.my_disk["${secondary_disk.key}"].id
+   }
+}
+
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.develop.id
+    nat       = true
+  }
+
+  metadata = {
+    serial-port-enable = 1
+    ssh-keys           = "ubuntu:${local.ssh-keys}"
+  }
+}
+```
+</details>
+
+ ![рис 9](https://github.com/ysatii/terraform_hw3/blob/main/img/img_9.jpg)
+ ![рис 10](https://github.com/ysatii/terraform_hw3/blob/main/img/img_10.jpg)
+ ![рис 11](https://github.com/ysatii/terraform_hw3/blob/main/img/img_11.jpg)
 
 ### Задание 4
 
