@@ -28,8 +28,8 @@
 
 
 Приложите скриншот входящих правил «Группы безопасности» в ЛК Yandex Cloud .
-
- ![рис 1](https://github.com/ysatii/terraform_hw3/blob3main/img/img_1.jpg)
+ ![рис 3](https://github.com/ysatii/terraform_hw3/blob/main/img/img_3.jpg)
+ ![рис 1](https://github.com/ysatii/terraform_hw3/blob/main/img/img_1.jpg)
  ![рис 2](https://github.com/ysatii/terraform_hw3/blob/main/img/img_2.jpg)
 ------
 
