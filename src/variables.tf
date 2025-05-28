@@ -42,3 +42,24 @@ variable "folder_id" {
   description = "Yandex Cloud folder ID"
   type        = string
 }
+
+variable "wm_resources" {
+  type        = list(object({ vm_name=string, cpu=number, ram=number, disk_size=number, core_fraction=number, disk_volume=number}))
+  default     = [
+    {vm_name="main", 
+     cpu=2, 
+     ram=4, 
+     disk_size=10
+     core_fraction=5
+     disk_volume=1
+
+},
+    {vm_name="replica", 
+     cpu=2, 
+     ram=2, 
+     disk_size=20
+     core_fraction=5
+     disk_volume=1
+  }
+]
+}

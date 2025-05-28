@@ -43,7 +43,7 @@ variable "each_vm" {
   type = list(object({  vm_name=string, cpu=number, ram=number, disk_volume=number }))
 }
 ```  
-При желании внесите в переменную все возможные параметры.
+3. При желании внесите в переменную все возможные параметры.
 4. ВМ из пункта 2.1 должны создаваться после создания ВМ из пункта 2.2.
 5. Используйте функцию file в local-переменной для считывания ключа ~/.ssh/id_rsa.pub и его последующего использования в блоке metadata, взятому из ДЗ 2.
 6. Инициализируйте проект, выполните код.
@@ -53,6 +53,9 @@ variable "each_vm" {
 
 1. Файл  count-vm.tf создан, группа безопастности присвоена
 Листинг count-vm.tf 
+<details>
+  <summary>Нажми, чтобы раскрыть</summary>
+
 ```
 
 resource "yandex_compute_instance" "count" {
@@ -91,10 +94,99 @@ resource "yandex_compute_instance" "count" {
 
 }
 ```
+</details>
+
  ![рис 3](https://github.com/ysatii/terraform_hw3/blob/main/img/img_3.jpg)
  ![рис 1](https://github.com/ysatii/terraform_hw3/blob/main/img/img_1.jpg)
  ![рис 2](https://github.com/ysatii/terraform_hw3/blob/main/img/img_2.jpg)
 
+2. Создан фай for_each-vm.tf
+Листинг for_each-vm.tf
+<details>
+  <summary>Нажми, чтобы раскрыть</summary>
+
+```
+resource "yandex_compute_instance" "for_each" {
+
+  depends_on = [yandex_compute_instance.count]
+
+  for_each = {for env in var.wm_resources : env.vm_name => env}
+  platform_id = "standard-v1"
+  name = each.value.vm_name
+  
+  resources {
+    cores         = each.value.cpu
+    memory        = each.value.ram
+    core_fraction = each.value.core_fraction
+}     
+  boot_disk {
+    initialize_params {
+      image_id = var.vms_boot-disk_id
+      size = each.value.disk_size
+    }
+  }
+
+    scheduling_policy {
+    preemptible = true
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.develop.id
+    nat       = true
+    security_group_ids = [ 
+      yandex_vpc_security_group.example.id
+    ]
+  }
+
+  metadata = {
+    serial-port-enable = 1
+    ssh-keys           = "ubuntu:${local.ssh-keys}"
+  }
+}
+
+output "SSH"{
+value = local.ssh-keys
+}
+```
+</details>
+
+3. Добавлено variables.tf
+```
+variable "wm_resources" {
+  type        = list(object({ vm_name=string, cpu=number, ram=number, disk_size=number, core_fraction=number, disk_volume=number}))
+  default     = [
+    {vm_name="main", 
+     cpu=2, 
+     ram=4, 
+     disk_size=10
+     core_fraction=5
+     disk_volume=1
+
+},
+    {vm_name="replica", 
+     cpu=2, 
+     ram=2, 
+     disk_size=20
+     core_fraction=5
+     disk_volume=1
+  }
+]
+}
+```
+4. ВМ из пункта 2.1 должны создаваться после создания ВМ из пункта 2.2.
+учтено используем 
+```
+ depends_on = [yandex_compute_instance.count]
+```
+5. Используем функцию file в local-переменной для считывания ключа ~/.ssh/id_rsa.pub и его последующего использования в блоке metadata, взятому из ДЗ 
+
+locals {
+  ssh-keys = file("~/.ssh/id_ed25519.pub")
+}
+
+6. Выполняем код
+ ![рис 6](https://github.com/ysatii/terraform_hw3/blob/main/img/img_6.jpg)
+ ![рис 7](https://github.com/ysatii/terraform_hw3/blob/main/img/img_7.jpg)
 
 ### Задание 3
 
