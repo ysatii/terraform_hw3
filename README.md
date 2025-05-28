@@ -197,6 +197,7 @@ locals {
  Листинг disk_vm.tf
 <details>
 <summary>Нажми, чтобы раскрыть Листинг disk_vm.tf</summary>
+
 ```
 resource "yandex_compute_disk" "my_disk" {
   count    = 3
@@ -248,7 +249,8 @@ for_each = "${yandex_compute_disk.my_disk.*.id}"
   }
 }
 ```
-</details>
+
+</details>  
 
  ![рис 9](https://github.com/ysatii/terraform_hw3/blob/main/img/img_9.jpg)
  ![рис 10](https://github.com/ysatii/terraform_hw3/blob/main/img/img_10.jpg)
