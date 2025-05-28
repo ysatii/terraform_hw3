@@ -103,7 +103,7 @@ resource "yandex_compute_instance" "count" {
 2. Создан фай for_each-vm.tf
 Листинг for_each-vm.tf
 <details>
-  <summary>Нажми, чтобы раскрыть</summary>
+  <summary>Листинг for_each-vm.tf</summary>
 
 ```
 resource "yandex_compute_instance" "for_each" {
@@ -185,8 +185,8 @@ locals {
 }
 
 6. Выполняем код
- ![рис 6](https://github.com/ysatii/terraform_hw3/blob/main/img/img_6.jpg)
  ![рис 7](https://github.com/ysatii/terraform_hw3/blob/main/img/img_7.jpg)
+ ![рис 8](https://github.com/ysatii/terraform_hw3/blob/main/img/img_8.jpg)
 
 ### Задание 3
 
