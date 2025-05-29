@@ -1,13 +1,12 @@
-resource "yandex_compute_disk" "my_disk" {
-  count = var.disk_count
-  name  = "disk-${count.index}"
-  size     = "1"
-  type  = var.disk_type
-  zone  = var.zone
-  labels = {
-    environment = "disk-${count.index}"
-  }
+resource "yandex_compute_disk" "secondary_disks" {
+  for_each = toset(var.secondary_disk_names)
+
+  name = each.value
+  zone = var.default_zone
+  size = var.disk_size
+  type = var.disk_type
 }
+
 
 resource "yandex_compute_instance" "storage" {
 
@@ -24,15 +23,17 @@ memory = 4
 boot_disk {
 initialize_params {
 image_id = var.vms_boot-disk_id
-}
+ }
 }
 
-dynamic secondary_disk {
-for_each = "${yandex_compute_disk.my_disk.*.id}"
-   content {
-        disk_id = yandex_compute_disk.my_disk["${secondary_disk.key}"].id
-   }
+
+dynamic "secondary_disk" {
+  for_each = yandex_compute_disk.secondary_disks
+  content {
+    disk_id = secondary_disk.value.id
+  }
 }
+
 
 
   network_interface {
