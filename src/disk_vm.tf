@@ -1,11 +1,9 @@
 resource "yandex_compute_disk" "my_disk" {
-  count    = 3
-  name     = "disk-name-${count.index}"
+  count = var.disk_count
+  name  = "disk-${count.index}"
   size     = "1"
-  type     = "network-ssd"
-  zone     = "ru-central1-a"
- 
-
+  type  = var.disk_type
+  zone  = var.zone
   labels = {
     environment = "disk-${count.index}"
   }
@@ -44,6 +42,6 @@ for_each = "${yandex_compute_disk.my_disk.*.id}"
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys           = "ubuntu:${local.ssh-keys}"
+    ssh-keys           = "ubuntu:${var.ssh_key}"
   }
 }

@@ -32,10 +32,10 @@ resource "yandex_compute_instance" "for_each" {
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys           = "ubuntu:${local.ssh-keys}"
+    ssh-keys           = "ubuntu:${local.ssh_key}"
   }
 }
 
 output "SSH"{
-value = local.ssh-keys
+value = local.ssh_key
 }

@@ -1,3 +1,3 @@
 locals {
-  ssh-keys = file("~/.ssh/id_ed25519.pub")
+  ssh_key = var.ssh_key
 }

@@ -63,3 +63,27 @@ variable "wm_resources" {
   }
 ]
 }
+
+variable "disk_count" {
+  type        = number
+  description = "Количество создаваемых дисков"
+  default     = 3
+}
+
+variable "disk_type" {
+  type        = string
+  description = "Тип дисков (например, network-ssd)"
+  default     = "network-ssd"
+}
+
+variable "zone" {
+  type        = string
+  description = "Зона размещения дисков"
+  default     = "ru-central1-a"
+}
+
+variable "ssh_key" {
+  type        = string
+  description = "Публичный SSH-ключ для доступа к ВМ"
+  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGJ/8nl4RWFm+0oXUDpUSjuOP3AHCl2E/af1CpzwhtO6 lamer@lamer-VirtualBox"
+}
