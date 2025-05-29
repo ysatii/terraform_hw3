@@ -21,10 +21,11 @@ memory = 4
 }
 
 boot_disk {
-initialize_params {
-image_id = var.vms_boot-disk_id
- }
+  initialize_params {
+    image_id = data.yandex_compute_image.ubuntu.id
+  }
 }
+
 
 
 dynamic "secondary_disk" {
@@ -33,8 +34,6 @@ dynamic "secondary_disk" {
     disk_id = secondary_disk.value.id
   }
 }
-
-
 
   network_interface {
     subnet_id = yandex_vpc_subnet.develop.id

@@ -22,11 +22,11 @@ variable "vms_ssh_root_key" {
   description = "ssh-keygen -t ed25519"
 }
 
-variable "vms_boot-disk_id" {
-  type        = string
-  default     = "fd8aus3bfglr6dg9hsbk"
-  description = "https://yandex.cloud/ru/docs/compute/operations/images-with-pre-installed-software/get-list"
-}
+#variable "vms_boot-disk_id" {
+#  type        = string
+#  default     = "fd8aus3bfglr6dg9hsbk"
+#  description = "https://yandex.cloud/ru/docs/compute/operations/images-with-pre-installed-software/get-list"
+# }
 
 variable "token" {
   description = "IAM token for Yandex Cloud"
@@ -102,3 +102,6 @@ variable "disk_size" {
 }
 
 
+data "yandex_compute_image" "ubuntu" {
+  family = "ubuntu-2004-lts"
+}

@@ -13,7 +13,7 @@ resource "yandex_compute_instance" "for_each" {
 }     
   boot_disk {
     initialize_params {
-      image_id = var.vms_boot-disk_id
+      image_id = data.yandex_compute_image.ubuntu.id
       size = each.value.disk_size
     }
   }
