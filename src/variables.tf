@@ -22,11 +22,7 @@ variable "vms_ssh_root_key" {
   description = "ssh-keygen -t ed25519"
 }
 
-#variable "vms_boot-disk_id" {
-#  type        = string
-#  default     = "fd8aus3bfglr6dg9hsbk"
-#  description = "https://yandex.cloud/ru/docs/compute/operations/images-with-pre-installed-software/get-list"
-# }
+ 
 
 variable "token" {
   description = "IAM token for Yandex Cloud"
@@ -76,17 +72,6 @@ variable "disk_type" {
   default     = "network-ssd"
 }
 
-variable "zone" {
-  type        = string
-  description = "Зона размещения дисков"
-  default     = "ru-central1-a"
-}
-
-variable "ssh_key" {
-  type        = string
-  description = "Публичный SSH-ключ для доступа к ВМ"
-  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGJ/8nl4RWFm+0oXUDpUSjuOP3AHCl2E/af1CpzwhtO6 lamer@lamer-VirtualBox"
-}
 
 variable "secondary_disk_names" {
   description = "Список имён дополнительных дисков"

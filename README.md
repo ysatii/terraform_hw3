@@ -93,6 +93,7 @@ resource "yandex_compute_instance" "count" {
   }
 
 }
+
 ```
 </details>
 
@@ -140,8 +141,12 @@ resource "yandex_compute_instance" "for_each" {
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys           = "ubuntu:${local.ssh-keys}"
+    ssh-keys           = "ubuntu:${local.ssh_key}"
   }
+}
+
+output "SSH"{
+value = local.ssh_key
 }
 
 
@@ -197,18 +202,15 @@ locals {
 <summary>Нажми, чтобы раскрыть Листинг disk_vm.tf</summary>
 
 ```
-resource "yandex_compute_disk" "my_disk" {
-  count    = 3
-  name     = "disk-name-${count.index}"
-  size     = "1"
-  type     = "network-ssd"
-  zone     = "ru-central1-a"
- 
+resource "yandex_compute_disk" "secondary_disks" {
+  for_each = toset(var.secondary_disk_names)
 
-  labels = {
-    environment = "disk-${count.index}"
-  }
+  name = each.value
+  zone = var.default_zone
+  size = var.disk_size
+  type = var.disk_type
 }
+
 
 resource "yandex_compute_instance" "storage" {
 
@@ -223,18 +225,19 @@ memory = 4
 }
 
 boot_disk {
-initialize_params {
-image_id = data.yandex_compute_image.ubuntu.id
-}
-}
-
-dynamic secondary_disk {
-for_each = "${yandex_compute_disk.my_disk.*.id}"
-   content {
-        disk_id = yandex_compute_disk.my_disk["${secondary_disk.key}"].id
-   }
+  initialize_params {
+    image_id = data.yandex_compute_image.ubuntu.id
+  }
 }
 
+
+
+dynamic "secondary_disk" {
+  for_each = yandex_compute_disk.secondary_disks
+  content {
+    disk_id = secondary_disk.value.id
+  }
+}
 
   network_interface {
     subnet_id = yandex_vpc_subnet.develop.id
@@ -243,7 +246,7 @@ for_each = "${yandex_compute_disk.my_disk.*.id}"
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys           = "ubuntu:${local.ssh-keys}"
+    ssh-keys           = "ubuntu:${var.ssh_key}"
   }
 }
 ```
