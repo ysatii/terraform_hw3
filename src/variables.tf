@@ -22,6 +22,11 @@ variable "vms_ssh_root_key" {
   description = "ssh-keygen -t ed25519"
 }
 
+variable "ssh_key" {
+  type        = string
+  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGJ/8nl4RWFm+0oXUDpUSjuOP3AHCl2E/af1CpzwhtO6 lamer@lamer-VirtualBox"
+  description = "ssh-keygen -t ed25519"
+}
  
 
 variable "token" {

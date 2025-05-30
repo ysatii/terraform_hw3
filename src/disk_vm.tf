@@ -42,6 +42,6 @@ dynamic "secondary_disk" {
 
   metadata = {
     serial-port-enable = 1
-    ssh-keys           = "ubuntu:${var.ssh_key}"
+    ssh-keys           = "ubuntu:${local.ssh_key}"
   }
 }
